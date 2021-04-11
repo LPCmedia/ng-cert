@@ -1,0 +1,35 @@
+<div>
+  <ng-container *ngFor="let weatherPerZip of weatherPerZipcode$ | async">
+    <div class="well flex" *ngIf="weatherPerZip.weather; else notValid">
+      <div>
+        <h3>{{weatherPerZip.weather.name}} ({{weatherPerZip.zip}})</h3>
+        <h4>Current conditions:</h4>
+
+        <p *ngFor="let condition of weatherPerZip.weather.weather">
+          {{condition.description}}
+        </p>
+
+        <h4>Temperatures today:</h4>
+        <p>
+          Current {{weatherPerZip.weather.main.temp}}
+          - Max {{weatherPerZip.weather.main.temp_max}}
+          - Min {{weatherPerZip.weather.main.temp_min}}
+        </p>
+        <p>
+          <a [routerLink]="['forecast',weatherPerZip.zip]">Show 5-day forecast for {{weatherPerZip.weather.name}}</a>
+        </p>
+      </div>
+      <div>
+        <span class="close" (click)="deleteZipcode(weatherPerZip.zip)">×</span>
+        <img src="{{weatherPerZip.weather.weather[0] | weatherIconUrl}}">
+      </div>
+    </div>
+    <ng-template #notValid>
+      <div class="alert flex alert-danger">
+        <p>zipcode {{weatherPerZip.zip}} is not valid.</p>
+        <span class="close" (click)="deleteZipcode(weatherPerZip.zip)">×</span>
+      </div>
+    </ng-template>
+  </ng-container>
+
+</div>

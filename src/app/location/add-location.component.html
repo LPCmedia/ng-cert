@@ -1,0 +1,26 @@
+<div class="well" [formGroup]="zipcodeForm">
+  <div class="form-group">
+
+    <label for="zipcode">Enter a zipcode:</label>
+    <input formControlName="zipcode" class="form-control" placeholder="Enter a valid zipcode" type="text" name="zipcode" id="addLocation">
+    <div *ngIf="zipcode?.invalid && (zipcode?.dirty || zipcode?.touched)" class="alert alert-danger">
+      <span *ngIf="zipcode?.errors?.required">
+        zipcode is required.
+      </span>
+      <span *ngIf="zipcode?.errors?.minlength">
+        zipcode should have at least 5 numbers.
+      </span>
+      <span *ngIf="zipcode?.errors?.maxLenght">
+        zipcode should be less than 7 numbers.
+      </span>
+      <span *ngIf="zipcode?.errors?.pattern">
+        zipcode is not in the correct format.
+      </span>
+  
+    </div>
+  </div>
+  <br>
+  <button [disabled]="zipcodeForm.invalid" (click)="addLocation()" class="btn btn-primary" id="addLocationBtn">
+    Add location
+  </button>
+</div>

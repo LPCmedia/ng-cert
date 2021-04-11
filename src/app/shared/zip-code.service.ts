@@ -23,15 +23,6 @@ export class ZipCodeService {
 
   constructor() {
     this._localStorage =  window.localStorage;
-    // when the local storage is modified in dev tools we emit so the list is in sync
-    // too bad this doesn't capture all changes usefull for dev.
-    window.addEventListener('storage', (evt) => {
-      if ( evt.key === ZIP_LOCAL_STORAGE_KEY) {
-
-        const zipCodes = this.getZipcodesFromLocalStorage();
-        this._zipCodes$.next(this.zipsToArray(zipCodes));
-      }
-    }, false);
 
     // initial zips
     const zips = this.getZipcodesFromLocalStorage();
@@ -40,7 +31,7 @@ export class ZipCodeService {
   }
 
   /** returns the list of zip codes from local storage */
-  get zipcodes$(): Observable<any> {
+  get zipcodes$(): Observable<Array<string>> {
     return this._zipCodes$.asObservable();
   }
 
@@ -48,10 +39,19 @@ export class ZipCodeService {
   addZipcode(zip: string): void {
     const zipCodes = this.getZipcodesFromLocalStorage();
 
-    console.log(zipCodes);
-
     if (!zipCodes[zip]) {
       zipCodes[zip] = zip;
+      this._localStorage.setItem(ZIP_LOCAL_STORAGE_KEY, JSON.stringify(zipCodes));
+      this._zipCodes$.next(this.zipsToArray(zipCodes));
+    }
+  }
+
+  /** adds a zip code to local storage. assumes zip code is correct. */
+  deleteZipcode(zip: string): void {
+    const zipCodes = this.getZipcodesFromLocalStorage();
+
+    if (zipCodes[zip]) {
+      delete zipCodes[zip];
       this._localStorage.setItem(ZIP_LOCAL_STORAGE_KEY, JSON.stringify(zipCodes));
       this._zipCodes$.next(this.zipsToArray(zipCodes));
     }

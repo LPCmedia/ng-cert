@@ -1,0 +1,30 @@
+<div class="container-fluid">
+  <div *ngIf="forecastsPerZip; else fallBack" class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">5-day forecast for {{forecastsPerZip.city.name}} </h3>
+    </div>
+    <ul class="list-group">
+      <!---->
+      <li *ngFor="let forecast of forecastsPerZip.list" class="list-group-item">
+        {{forecast.dt * 1000 | date : 'EEEE, MMMM d'}}
+
+        <p *ngFor="let condition of forecast.weather">
+          {{condition.description}}
+        </p>
+        - Min: {{forecast.temp.min}}
+        - Max: {{forecast.temp.max}}
+
+        <img class="icon" src="{{forecast.weather[0] | weatherIconUrl}}">
+      </li>
+    </ul>
+  </div>
+
+  <button [routerLink]="['']" class="btn btn-success" tabindex="0" id="mainPageBtn">&lt; Back to main page</button>
+
+  <ng-template #fallBack>
+    <div class="panel-heading">
+      <h3 class="panel-title">{{fallback}}</h3>
+    </div>
+  </ng-template>
+
+</div>
