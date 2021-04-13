@@ -18,6 +18,11 @@ export class WeatherService {
   ) { }
 
   getWeatherPerZipcodes(zipcodes: Array<string>): Observable<any> {
+
+    // fix when zipcodes are empty return an empty list as the inner obs will be empty...
+    if (zipcodes.length === 0) {
+      return of([]);
+    }
     return forkJoin(
       zipcodes.map((zip) => {
         return this.httpClient.get(`${API_BASE_PATH}/weather`, { params: {zip, appid: API_KEY, units: 'imperial'}})

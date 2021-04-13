@@ -63,5 +63,6 @@ export class ZipCodeService {
 
   private zipsToArray(zipcodes: any): Array<string> {
     return Object.keys(zipcodes);
+
   }
 }
